@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/styles.css">
     <script src="vendor/jquery/jquery-1.9.1.js"></script>
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
     <script src="js/setup.js"></script>
   </head>
   <body>
@@ -14,11 +15,9 @@
       <h1>Chat with JSON!</h1>
       <div class='input'>
         <form>
-          <label>User Name: </label>
-          <input type="text" name="username"></input>
-          <br>
           <label>Msg: </label>
           <input type="text" name="msg"></input>
+          <button type="submit">Tweet</button>
         </form>
       </div>
     </div>
@@ -39,6 +38,25 @@
 
     // };
 
+    var formHandler = function(event){
+      event.preventDefault(); //prevent from refresh on submit
+      var data = $('form').serializeArray();
+      console.log(data);
+
+      var msg_text = data[0].value;
+
+      user.user_name = user.user_name || 'marcus_the_god'; //default
+      var msg = {username: user.user_name};
+      _(msg).extend({text: msg_text});
+
+      console.log('msg: ', msg);
+      user.newmessage(msg);
+    };
+
+
+    $("form").on('submit', formHandler);
+
+
     var room = {
       room_name: "wild party room",
       display: function(){
@@ -57,7 +75,9 @@
             var results = data.results;
             for(var i=0; i<results.length; i++){
               // console.log(i + '---' + results[i].createdAt + $('<div>dummy</div>').text(results[i].text).html() );
-              $('.room1').append(i + '---' + results[i].createdAt  + $('<div>dummy</div>').text(results[i].text).html() ).append('<br>');
+              $('.room1').append(i + '__' + results[i].createdAt  +
+                '___' +  results[i].username +
+                '___' + $('<div>dummy</div>').text(results[i].text).html() ).append('<br>');
             }
           };
 
@@ -113,10 +133,10 @@
       }
     };
 
-      user.newmessage({
-        username: 'marcus_the_god',
-        text: '----------->NSA sees you<-------'
-      });
+      // user.newmessage({
+      //   username: 'marcus_the_god',
+      //   text: '----------->NSA sees you<-------'
+      // });
 
     room.fetch_msg();
 
