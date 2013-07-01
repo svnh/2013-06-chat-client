@@ -40,15 +40,13 @@
       fetch_msg: function(){
         var that = this;
         $.ajax({
-          url:'https://api.parse.com/1/classes/test'
+          url:'https://api.parse.com/1/classes/messages'
         }).done(function(data){
 
-          //console.log('data: ', data);
+          console.log('data: ', data);
           var parse_data = function(data){
-            // console.log('---\n');
             var results = data.results;
             for(var i=0; i<results.length; i++){
-              // console.log(results[i].text);
               $('.room1').append(results[i].text).append('<br>');
             }
           };
@@ -56,42 +54,58 @@
           parse_data(data);
 
         });
+      },
+      fetch_msg_wild_party:function(){
+        var that = this;
+        $.ajax({
+          url:'https://api.parse.com/1/classes/wild_party_room'
+        }).done(function(data){
+
+          console.log('data: ', data);
+          var parse_data = function(data){
+            // console.log('---\n');
+            var results = data.results;
+            for(var i=0; i<results.length; i++){
+              $('.room1').append(results[i].key1).append('<br>');
+            }
+          };
+
+          parse_data(data);
+
+        });
+
+
       }
     };
 
     room.display();
-    room.fetch_msg();
-    var msg = JSON.stringify({key1:'value1'});
 
     var user = {
       user_name: window.location.search.split('?username=')[1],
       newmessage: function(message){
-        var request = $.ajax(
-          'https://api.parse.com/1/classes/test',
-        {
-          contentType: 'application/json',
+        //expect message as a obj with key-value pairs
+        var msg = JSON.stringify(message);
+
+        var request = $.ajax({
+          url:'https://api.parse.com/1/classes/wild_party_room',
           type: "POST",
           data: msg,
-          success: function(data) {
-            console.log('data: ', data);
-          },
-          error: function(data) {
-            console.log('error', data);
-          }
+          contentType: 'application/json'
         });
-        // request.done(function(message){
-        //   console.log('done', message);
-        // });
-        // request.fail(function(jqXHR, textStatus){
-        //   // debugger;
-        //   console.log('request failed' + textStatus + jqXHR.responseText);
-        // });
+
+        request.done(function(message){
+          console.log('done', message);
+        });
+
+        request.fail(function(jqXHR, textStatus){
+          console.log('request failed' + textStatus + jqXHR.responseText);
+        });
       }
     };
 
-    user.newmessage('dd');
+    user.newmessage({key1:'aaaaaaaaaaaaaaahhhhhhhhhhaaaaaaaaaaa'});
 
-    room.fetch_msg();
+    room.fetch_msg_wild_party();
 
 
     </script>
