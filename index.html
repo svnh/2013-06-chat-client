@@ -87,7 +87,7 @@
         var msg = JSON.stringify(message);
 
         var request = $.ajax({
-          url:'https://api.parse.com/1/classes/wild_party_room',
+          url:'https://api.parse.com/1/classes/messages',
           type: "POST",
           data: msg,
           contentType: 'application/json'
@@ -103,9 +103,12 @@
       }
     };
 
-    user.newmessage({key1:'aaaaaaaaaaaaaaahhhhhhhhhhaaaaaaaaaaa'});
+    user.newmessage({
+      username: 'shawndrost',
+      text: 'trolodddddddddddddddddddddddddddddddddlo'
+    });
 
-    room.fetch_msg_wild_party();
+    room.fetch_msg();
 
 
     </script>
