@@ -31,19 +31,30 @@
     // };
 
     var room = {
-      room_name: 'dining_hall',
+      room_name: "wild party room",
       display: function(){
-        console.log(this.room_name);
-        $('body').append('<div>'+this.room_name+'</div>');
+        $('body').append('<div class="room1"></div>');
+        $('.room1').append('<h3 class="room_name">' +
+            this.room_name + '</h3>');
       },
       fetch_msg: function(){
         var that = this;
         $.ajax({
           url:'https://api.parse.com/1/classes/messages'
         }).done(function(data){
-         $('body').append('<div>'+that.room_name+'</div>');
 
-         
+          console.log('data: ', data);
+          var parse_data = function(data){
+            console.log('---\n');
+            var results = data.results;
+            for(var i=0; i<results.length; i++){
+              console.log(results[i].text);
+              $('.room1').append(results[i].text).append('<br>');
+            }
+          };
+
+          parse_data(data);
+
         });
       }
     };
