@@ -61,24 +61,31 @@
 
     room.display();
     room.fetch_msg();
-    var msg = JSON.stringify('ttt');
+    var msg = JSON.stringify({key1:'value1'});
 
     var user = {
       user_name: window.location.search.split('?username=')[1],
       newmessage: function(message){
-        var request = $.ajax({
-          url:"https://api.parse.com/1/classes/test123",
+        var request = $.ajax(
+          'https://api.parse.com/1/classes/test',
+        {
+          contentType: 'application/json',
           type: "POST",
           data: msg,
-          contentType: 'application/json'
+          success: function(data) {
+            console.log('data: ', data);
+          },
+          error: function(data) {
+            console.log('error', data);
+          }
         });
-        request.done(function(message){
-          console.log('done', message);
-        });
-        request.fail(function(jqXHR, textStatus){
-          // debugger;
-          console.log('request failed' + textStatus + jqXHR.responseText);
-        });
+        // request.done(function(message){
+        //   console.log('done', message);
+        // });
+        // request.fail(function(jqXHR, textStatus){
+        //   // debugger;
+        //   console.log('request failed' + textStatus + jqXHR.responseText);
+        // });
       }
     };
 
