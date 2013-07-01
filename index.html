@@ -51,6 +51,9 @@
 
       console.log('msg: ', msg);
       user.newmessage(msg);
+
+      //fetch
+      room.fetch_msg();
     };
 
 
@@ -73,11 +76,19 @@
           console.log('data: ', data);
           var parse_data = function(data){
             var results = data.results;
+            var $container = $('<div class="container"></div>');
             for(var i=0; i<results.length; i++){
               // console.log(i + '---' + results[i].createdAt + $('<div>dummy</div>').text(results[i].text).html() );
-              $('.room1').append(i + '__' + results[i].createdAt  +
+              $container.append(i + '__' + results[i].createdAt  +
                 '___' +  results[i].username +
                 '___' + $('<div>dummy</div>').text(results[i].text).html() ).append('<br>');
+            }
+
+            //asyncally refresh msg list
+            if ($('.container').length === 0) {
+              $('.room1').append($container);
+            } else {
+              $('.container').replaceWith($container);
             }
           };
 
