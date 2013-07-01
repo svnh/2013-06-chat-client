@@ -40,7 +40,7 @@
       fetch_msg: function(){
         var that = this;
         $.ajax({
-          url:'https://api.parse.com/1/classes/messages'
+          url:'https://api.parse.com/1/classes/test'
         }).done(function(data){
 
           //console.log('data: ', data);
@@ -61,23 +61,23 @@
 
     room.display();
     room.fetch_msg();
+    var msg = JSON.stringify('ttt');
 
     var user = {
       user_name: window.location.search.split('?username=')[1],
       newmessage: function(message){
         var request = $.ajax({
-          url:'https://api.parse.com/1/classes/messages',
+          url:"https://api.parse.com/1/classes/test123",
           type: "POST",
-          data: {
-            'username': 'shawndrost',
-            'text': 'trololo11111111111111111111111111111'
-          }
+          data: msg,
+          contentType: 'application/json'
         });
         request.done(function(message){
           console.log('done', message);
         });
         request.fail(function(jqXHR, textStatus){
-          console.log('request failed' + textStatus);
+          // debugger;
+          console.log('request failed' + textStatus + jqXHR.responseText);
         });
       }
     };
