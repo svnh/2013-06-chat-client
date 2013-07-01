@@ -13,6 +13,47 @@
     <div id="main">
       <h1>Chat with JSON!</h1>
     </div>
+    <script>
+
+
+    // var rooms = {};
+    // rooms.addRoom = function(room_name){
+    //   var room = {
+    //     room_name:room_name
+    //   };
+    //   return room;
+    // };
+    // rooms.removeRoom = function(){
+
+    // };
+    // rooms.displayRoom = function(room_name){
+
+    // };
+
+    var room = {
+      room_name: 'dining_hall',
+      display: function(){
+        console.log(this.room_name);
+        $('body').append('<div>'+this.room_name+'</div>');
+      },
+      fetch_msg: function(){
+        var that = this;
+        $.ajax({
+          url:'https://api.parse.com/1/classes/messages'
+        }).done(function(data){
+         $('body').append('<div>'+that.room_name+'</div>');
+
+         
+        });
+      }
+    };
+
+    room.display();
+    room.fetch_msg();
+
+
+
+    </script>
 
   </body>
 </html>
