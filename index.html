@@ -167,7 +167,7 @@
     Room.prototype.fetch_msg = function(){
       var that = this;
       $.ajax({
-        url:'https://api.parse.com/1/classes/messages?order=-createdAt'
+        url:'https://api.parse.com/1/classes/' + that.room_name + '?order=-createdAt'
       }).done(function(data){
         //double check we are receiving data
         console.log('receiving data? ', data);
