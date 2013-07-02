@@ -24,18 +24,20 @@
     <script>
 
 
-    // var rooms = {};
+    // var rooms = [];
     // rooms.addRoom = function(room_name){
-    //   var room = {
-    //     room_name:room_name
-    //   };
-    //   return room;
+    // expect room_name to be string which would be part of the url
+    // expect room to be at: https://api.parse.com/1/classes/room_name?order=-createdAt
+    //   var room = new Room(room_name);
+    //  rooms.push(room);
     // };
+
     // rooms.removeRoom = function(){
-
+    // remove from the array
     // };
-    // rooms.displayRoom = function(room_name){
 
+    // rooms.displayRooms = function(room_name){
+    // for each room, call room.display()
     // };
 
     var formHandler = function(event){
@@ -86,61 +88,65 @@
 
 
 
-    var room = {
-      room_name: "wild party room",
-      display: function(){
-        $('body').append('<div class="room1"></div>');
-        $('.room1').append('<h3 class="room_name">' +
-            this.room_name + '</h3>');
-      },
-      fetch_msg: function(){
-        var that = this;
-        $.ajax({
-          url:'https://api.parse.com/1/classes/messages?order=-createdAt'
-        }).done(function(data){
-
-          var parse_data = function(data){
-            var results = data.results;
-            var $container = $('<div class="container"></div>');
-            for(var i=0; i<results.length; i++){
-              var templateString = "<div> \
-                  <span class='people'><%= username %></span>  \
-                  <span><%= createdAt %></span> \
-                  <span><%= message %></span> \
-                </div><br>";
-              var messageData = {
-                username:  _.escape( results[i].username ),
-                createdAt: _.escape( results[i].createdAt ),
-                message: _.escape(results[i].text)
-              };
-              $container.append(_.template(templateString, messageData));
-            }
-
-            //asyncally refresh msg list
-            if ($('.container').length === 0) {
-              $('.room1').append($container);
-                //rebind events everytime page reloads
-                $('.people').on('click', peopleHandler);
-            } else {
-              $('.container').replaceWith($container);
-                //rebind events everytime page reloads
-                $('.people').on('click', peopleHandler);
-            }
-          };
-
-          parse_data(data);
-
-        });
-
-        //call it every 100 ms
-        // setTimeout(function(){
-        //   that.fetch_msg();
-        // }, 100);
-
-      }
+    var Room = function(room_name) {
+      this.room_name = room_name;
     };
 
-    room.display();
+    Room.prototype.display = function(){
+      $('body').append('<div class="room1"></div>');
+      $('.room1').append('<h3 class="room_name">' +
+          this.room_name + '</h3>');
+    };
+
+    Room.prototype.fetch_msg = function(){
+      var that = this;
+      $.ajax({
+        url:'https://api.parse.com/1/classes/messages?order=-createdAt'
+      }).done(function(data){
+
+        var parse_data = function(data){
+          var results = data.results;
+          var $container = $('<div class="container"></div>');
+          for(var i=0; i<results.length; i++){
+            var templateString = "<div> \
+                <span class='people'><%= username %></span>  \
+                <span><%= createdAt %></span> \
+                <span><%= message %></span> \
+              </div><br>";
+            var messageData = {
+              username:  _.escape( results[i].username ),
+              createdAt: _.escape( results[i].createdAt ),
+              message: _.escape(results[i].text)
+            };
+            $container.append(_.template(templateString, messageData));
+          }
+
+          //asyncally refresh msg list
+          if ($('.container').length === 0) {
+            $('.room1').append($container);
+              //rebind events everytime page reloads
+              $('.people').on('click', peopleHandler);
+          } else {
+            $('.container').replaceWith($container);
+              //rebind events everytime page reloads
+              $('.people').on('click', peopleHandler);
+          }
+        };
+
+        parse_data(data);
+
+    });
+
+      //call it every 100 ms
+      // setTimeout(function(){
+      //   that.fetch_msg();
+      // }, 100);
+
+    };
+
+    var room1 = new Room('messages');
+
+    room1.display();
 
     var user = {
       user_name: window.location.search.split('?username=')[1],
@@ -166,7 +172,7 @@
       buddyList: []
     };
 
-    room.fetch_msg();
+    room1.fetch_msg();
 
     </script>
 
