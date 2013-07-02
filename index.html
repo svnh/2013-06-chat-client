@@ -64,15 +64,29 @@
       event.preventDefault();
       console.log(event.target.textContent);
       var buddyName = event.target.textContent;
-      user.buddyList.push(buddyName);
+      //if buddyName is not a friend
+      //add to buddy list
+      //add class=buddy to its parent element
+      if (_(user.buddyList).indexOf(buddyName) === -1) {
+        user.buddyList.push(buddyName);
+        $('.people').each(function(index){
+          var flag = _(user.buddyList).contains($(this).text());
+          if (flag) {
+            $(this).parent().addClass("buddy");
+          }
+        });
+      //if buddyName is a friend but we clicked on it
+      //delete from buddy list
+      //remove class=buddy from its parent element
+      } else {
+        user.buddyList.splice(_(user.buddyList).indexOf(buddyName), 1);
+        $('.people').each(function(index){
+          if ( $(this).text() === buddyName ) {
+            $(this).parent().removeClass("buddy");
+          }
+        });
+      }
       console.log(user.buddyList);
-
-      $('.people').each(function(index){
-        var flag = _(user.buddyList).contains($(this).text());
-        if (flag) {
-          $(this).parent().toggleClass("buddy");
-        }
-      });
     };
 
 
