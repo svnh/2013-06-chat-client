@@ -65,17 +65,18 @@
         selectObj.append('<option value="' +room.room_name+ '">' + room.room_name + '</option>');
       });
       $('select.nameDropDown').replaceWith(selectObj);
+
     }
 
     var chooseRoomHandler = function(event) {
       event.preventDefault();
-      var data = $(this).serializeArray();
-      console.log(data);
-
-      rooms.currentRoom = data[0].value;
+      var selected = event.target.value;
+      console.log('selected: ', selected);
+      rooms.currentRoom = selected;
       console.log('currentRoom: ', rooms.currentRoom);
     };
     $('form.roomList').on('change', chooseRoomHandler);
+    // $(document).on('change', 'form.roomList', chooseRoomHandler);
 
     // rooms.removeRoom = function(){
     // remove from the array
