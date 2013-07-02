@@ -27,9 +27,7 @@
         <form class="roomList">
           <label>Choose Room: </label>
           <select class="nameDropDown" name="mydropdown">
-          <option value="Milk">Fresh Milk</option>
-          <option value="Cheese">Old Cheese</option>
-          <option value="Bread">Hot Bread</option>
+          <option value="messages">messages</option>
           </select>
         </form>
       </div>
@@ -42,6 +40,13 @@
       currentRoom: {}
     };
     rooms.addRoom = function(room_name){
+    // expect room_name to be string which would be part of the url
+    // expect room to be at: https://api.parse.com/1/classes/room_name?order=-createdAt
+      var room = new Room(room_name);
+      this.roomList.push(room);
+      return room;
+    };
+    rooms.getRoom = function(room_name){
     // expect room_name to be string which would be part of the url
     // expect room to be at: https://api.parse.com/1/classes/room_name?order=-createdAt
       var room = new Room(room_name);
