@@ -87,9 +87,7 @@
     var chooseRoomHandler = function(event) {
       event.preventDefault();
       var selected = event.target.value;
-      console.log('selected: ', selected);
       rooms.currentRoom = rooms.getRoom(selected);
-      console.log('currentRoom: ', rooms.currentRoom);
       //
       rooms.currentRoom.display();
       rooms.currentRoom.fetch_msg();
@@ -170,8 +168,6 @@
         url:'https://api.parse.com/1/classes/' + that.room_name + '?order=-createdAt'
       }).done(function(data){
         //double check we are receiving data
-        console.log('receiving data? ', data);
-
         var parse_data = function(data){
           var results = data.results;
           var $container = $('<div class="container"></div>');
@@ -193,13 +189,10 @@
           //USE a HTML element with class=this.room_name as an anchor point
           if ($('.container').length === 0) {
             $('.' + that.room_name).append($container);
-            console.log('create a new container', that.room_name, $('.' + that.room_name) );
-            // debugger;
             //rebind events everytime page reloads
             $('.people').on('click', peopleHandler);
           } else {
             $('.container').replaceWith($container);
-            console.log('replace old container', $container);
               //rebind events everytime page reloads
               $('.people').on('click', peopleHandler);
           }
@@ -209,10 +202,10 @@
 
     });
 
-      //call it every 100 ms
-      // setTimeout(function(){
-      //   that.fetch_msg();
-      // }, 100);
+      // call it every 100 ms
+      setTimeout(function(){
+        that.fetch_msg();
+      }, 100);
 
     };
 
