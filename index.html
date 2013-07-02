@@ -58,7 +58,9 @@
       return output;
     };
     rooms.init = function() {
-      this.addRoom('messages');
+      var init_room = this.addRoom('messages');
+      init_room.display();
+      init_room.fetch_msg();
     };
 
 
@@ -90,6 +92,7 @@
       console.log('currentRoom: ', rooms.currentRoom);
       //
       rooms.currentRoom.display();
+      rooms.currentRoom.fetch_msg();
     };
     $('form.roomList').on('change', chooseRoomHandler);
 
@@ -158,8 +161,7 @@
         $('.roomBorder').replaceWith('<div class="roomBorder ' + this.room_name + '"></div>');
       }
 
-      $('.' + this.room_name).append('<h3 class="' + this.room_name + '">' +
-          this.room_name + '</h3>');
+      $('.' + this.room_name).append('<h3 >' + this.room_name + '</h3>');
     };
 
     Room.prototype.fetch_msg = function(){
@@ -167,6 +169,8 @@
       $.ajax({
         url:'https://api.parse.com/1/classes/messages?order=-createdAt'
       }).done(function(data){
+        //double check we are receiving data
+        console.log('receiving data? ', data);
 
         var parse_data = function(data){
           var results = data.results;
@@ -186,12 +190,16 @@
           }
 
           //asyncally refresh msg list
+          //USE a HTML element with class=this.room_name as an anchor point
           if ($('.container').length === 0) {
-            $('.' + this.room_name).append($container);
-              //rebind events everytime page reloads
-              $('.people').on('click', peopleHandler);
+            $('.' + that.room_name).append($container);
+            console.log('create a new container', that.room_name, $('.' + that.room_name) );
+            // debugger;
+            //rebind events everytime page reloads
+            $('.people').on('click', peopleHandler);
           } else {
             $('.container').replaceWith($container);
+            console.log('replace old container', $container);
               //rebind events everytime page reloads
               $('.people').on('click', peopleHandler);
           }
