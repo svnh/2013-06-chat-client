@@ -216,9 +216,6 @@
 
     };
 
-    // var room1 = new Room('messages');
-
-    // room1.display();
 
     var user = {
       user_name: window.location.search.split('?username=')[1],
@@ -227,7 +224,7 @@
         var msg = JSON.stringify(message);
 
         var request = $.ajax({
-          url:'https://api.parse.com/1/classes/messages',
+          url:'https://api.parse.com/1/classes/' + rooms.currentRoom.room_name ,
           type: "POST",
           data: msg,
           contentType: 'application/json'
