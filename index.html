@@ -14,23 +14,56 @@
     <div id="main">
       <h1>Chat with JSON!</h1>
       <div class='input'>
-        <form>
+        <form class ="msg">
           <label>Msg: </label>
           <input type="text" name="msg"></input>
           <button type="submit">Tweet</button>
         </form>
+        <form class="createRoom">
+          <label>Create Room: </label>
+          <input type="text" name="roomName"></input>
+          <button type="submit">Add</button>
+        </form>
+        <form class="roomList">
+          <label>Choose Room: </label>
+          <select class="nameDropDown" name="mydropdown">
+          <option value="Milk">Fresh Milk</option>
+          <option value="Cheese">Old Cheese</option>
+          <option value="Bread">Hot Bread</option>
+          </select>
+        </form>
       </div>
     </div>
     <script>
+    //$('.nameDropDown').append($('<option value="sad">' + 'sad' + <'/option>'))
 
-
-    // var rooms = [];
-    // rooms.addRoom = function(room_name){
+    var rooms = {
+      roomList: []
+    };
+    rooms.addRoom = function(room_name){
     // expect room_name to be string which would be part of the url
     // expect room to be at: https://api.parse.com/1/classes/room_name?order=-createdAt
-    //   var room = new Room(room_name);
-    //  rooms.push(room);
-    // };
+      var room = new Room(room_name);
+      this.roomList.push(room);
+    };
+
+    var addRoomHandler = function(event){
+      event.preventDefault();
+      var data = $('form.createRoom').serializeArray();
+      console.log(data);
+      rooms.addRoom(data[0].value);
+      console.log(rooms);
+    }
+
+    $('form.createRoom').on('submit', addRoomHandler);
+
+    var chooseRoomHandler = function(event) {
+      event.preventDefault();
+      var data = $('form.roomList').serializeArray();
+      console.log(data);
+    }
+
+    $('form.roomList').on('change', chooseRoomHandler);
 
     // rooms.removeRoom = function(){
     // remove from the array
@@ -53,11 +86,11 @@
       user.newmessage(msg);
 
       //fetch
-      room.fetch_msg();
+      room1.fetch_msg();
     };
 
 
-    $("form").on('submit', formHandler);
+    $('form.msg').on('submit', formHandler);
 
     var peopleHandler = function(event){
       event.preventDefault();
