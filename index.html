@@ -38,31 +38,43 @@
     //$('.nameDropDown').append($('<option value="sad">' + 'sad' + <'/option>'))
 
     var rooms = {
-      roomList: []
+      roomList: [],
+      currentRoom: {}
     };
     rooms.addRoom = function(room_name){
     // expect room_name to be string which would be part of the url
     // expect room to be at: https://api.parse.com/1/classes/room_name?order=-createdAt
       var room = new Room(room_name);
       this.roomList.push(room);
+      return room;
     };
+
 
     var addRoomHandler = function(event){
       event.preventDefault();
-      var data = $('form.createRoom').serializeArray();
-      console.log(data);
+      var data = $(this).serializeArray();
       rooms.addRoom(data[0].value);
-      console.log(rooms);
-    }
-
+      updateDropDown();
+    };
     $('form.createRoom').on('submit', addRoomHandler);
+
+    //updated the dropdown everytime after adding a new room
+    var updateDropDown = function() {
+      var selectObj = $('<select class="nameDropDown"></select>');
+      _.each(rooms.roomList, function(room){
+        selectObj.append('<option value="' +room.room_name+ '">' + room.room_name + '</option>');
+      });
+      $('select.nameDropDown').replaceWith(selectObj);
+    }
 
     var chooseRoomHandler = function(event) {
       event.preventDefault();
-      var data = $('form.roomList').serializeArray();
+      var data = $(this).serializeArray();
       console.log(data);
-    }
 
+      rooms.currentRoom = data[0].value;
+      console.log('currentRoom: ', rooms.currentRoom);
+    };
     $('form.roomList').on('change', chooseRoomHandler);
 
     // rooms.removeRoom = function(){
