@@ -41,7 +41,6 @@
     var formHandler = function(event){
       event.preventDefault(); //prevent from refresh on submit
       var data = $('form').serializeArray();
-      console.log(data);
 
       var msg_text = data[0].value;
 
@@ -49,7 +48,6 @@
       var msg = {username: user.user_name};
       _(msg).extend({text: msg_text});
 
-      console.log('msg: ', msg);
       user.newmessage(msg);
 
       //fetch
@@ -60,9 +58,7 @@
     $("form").on('submit', formHandler);
 
     var peopleHandler = function(event){
-      console.log('PeopleHandler clicked');
       event.preventDefault();
-      console.log(event.target.textContent);
       var buddyName = event.target.textContent;
       //if buddyName is not a friend
       //add to buddy list
@@ -86,7 +82,6 @@
           }
         });
       }
-      console.log(user.buddyList);
     };
 
 
@@ -104,12 +99,10 @@
           url:'https://api.parse.com/1/classes/messages?order=-createdAt'
         }).done(function(data){
 
-          // console.log('data: ', data);
           var parse_data = function(data){
             var results = data.results;
             var $container = $('<div class="container"></div>');
             for(var i=0; i<results.length; i++){
-              // console.log(i + '---' + results[i].createdAt + $('<div>dummy</div>').text(results[i].text).html() );
               var templateString = "<div> \
                   <span class='people'><%= username %></span>  \
                   <span><%= createdAt %></span> \
@@ -173,15 +166,7 @@
       buddyList: []
     };
 
-      // user.newmessage({
-      //   username: 'marcus_the_god',
-      //   text: '----------->NSA sees you<-------'
-      // });
-
     room.fetch_msg();
-
-
-
 
     </script>
 
