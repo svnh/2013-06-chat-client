@@ -22,33 +22,30 @@
         <form class="createRoom">
           <label>Create Room: </label>
           <input type="text" name="roomName"></input>
-          <button type="submit">Add</button>
+          <button type="submit">Create Room</button>
         </form>
         <form class="roomList">
           <label>Choose Room: </label>
           <select class="nameDropDown" name="mydropdown">
-          <option value="messages">messages</option>
+          <option value="messages">Messages</option>
           </select>
         </form>
       </div>
     </div>
     <script>
-    //$('.nameDropDown').append($('<option value="sad">' + 'sad' + <'/option>'))
 
     var rooms = {
       roomList: [],
       currentRoom: {}
     };
     rooms.addRoom = function(room_name){
-    // expect room_name to be string which would be part of the url
-    // expect room to be at: https://api.parse.com/1/classes/room_name?order=-createdAt
+      // expect room_name to be string which would be part of the url
+      // expect room to be at: https://api.parse.com/1/classes/room_name?order=-createdAt
       var room = new Room(room_name);
       this.roomList.push(room);
       return room;
     };
     rooms.getRoom = function(room_name){
-    // input = string
-    // output = {}
       var output = {};
       _(this.roomList).each(function (room) {
         if(room.room_name === room_name){
@@ -61,10 +58,8 @@
       var init_room = this.addRoom('messages');
       init_room.display();
       init_room.fetch_msg();
+      this.currentRoom = init_room;
     };
-
-
-
 
     var addRoomHandler = function(event){
       event.preventDefault();
@@ -81,8 +76,7 @@
         selectObj.append('<option value="' +room.room_name+ '">' + room.room_name + '</option>');
       });
       $('select.nameDropDown').replaceWith(selectObj);
-
-    }
+    };
 
     var chooseRoomHandler = function(event) {
       event.preventDefault();
@@ -93,11 +87,6 @@
       rooms.currentRoom.fetch_msg();
     };
     $('form.roomList').on('change', chooseRoomHandler);
-
-    // rooms.removeRoom = function(){
-    // remove from the array
-    // };
-
 
     var formHandler = function(event){
       event.preventDefault(); //prevent from refresh on submit
@@ -116,6 +105,14 @@
     };
     $('form.msg').on('submit', formHandler);
 
+    var add_buddy_class = function(){
+      $('.people').each(function(index){
+        var flag = _(user.buddyList).contains($(this).text());
+        if (flag) {
+          $(this).parent().addClass("buddy");
+        }
+      });
+    };
 
     var peopleHandler = function(event){
       event.preventDefault();
@@ -125,12 +122,7 @@
       //add class=buddy to its parent element
       if (_(user.buddyList).indexOf(buddyName) === -1) {
         user.buddyList.push(buddyName);
-        $('.people').each(function(index){
-          var flag = _(user.buddyList).contains($(this).text());
-          if (flag) {
-            $(this).parent().addClass("buddy");
-          }
-        });
+        add_buddy_class();
       //if buddyName is a friend but we clicked on it
       //delete from buddy list
       //remove class=buddy from its parent element
@@ -143,7 +135,6 @@
         });
       }
     };
-
 
     //Room class starts here
     var Room = function(room_name) {
@@ -158,7 +149,6 @@
       //if there is a room already on the page, replace that room
         $('.roomBorder').replaceWith('<div class="roomBorder ' + this.room_name + '"></div>');
       }
-
       $('.' + this.room_name).append('<h3 >' + this.room_name + '</h3>');
     };
 
@@ -191,40 +181,17 @@
             $('.' + that.room_name).append($container);
             //rebind events everytime page reloads
             $('.people').on('click', peopleHandler);
-
-            $('.people').each(function(index){
-              var flag = _(user.buddyList).contains($(this).text());
-              if (flag) {
-                $(this).parent().addClass("buddy");
-              }
-            });
-
+            add_buddy_class();
           } else {
             $('.container').replaceWith($container);
-              //rebind events everytime page reloads
-              $('.people').on('click', peopleHandler);
-
-            $('.people').each(function(index){
-              var flag = _(user.buddyList).contains($(this).text());
-              if (flag) {
-                $(this).parent().addClass("buddy");
-              }
-            });
-
+            //rebind events everytime page reloads
+            $('.people').on('click', peopleHandler);
+            add_buddy_class();
           }
         };
-
         parse_data(data);
-
-    });
-
-      // call it every 100 ms
-      setTimeout(function(){
-        that.fetch_msg();
-      }, 100);
-
+      });
     };
-
 
     var user = {
       user_name: window.location.search.split('?username=')[1],
@@ -250,13 +217,14 @@
       buddyList: []
     };
 
-    // room1.fetch_msg();
-
-
     //init room!!!
     rooms.init();
 
-    </script>
+    // call it at a regular interval
+    setInterval(function(){
+      rooms.currentRoom.fetch_msg();
+    }, 3000);
 
+    </script>
   </body>
 </html>
