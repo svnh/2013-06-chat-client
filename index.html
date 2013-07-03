@@ -191,10 +191,26 @@
             $('.' + that.room_name).append($container);
             //rebind events everytime page reloads
             $('.people').on('click', peopleHandler);
+
+            $('.people').each(function(index){
+              var flag = _(user.buddyList).contains($(this).text());
+              if (flag) {
+                $(this).parent().addClass("buddy");
+              }
+            });
+
           } else {
             $('.container').replaceWith($container);
               //rebind events everytime page reloads
               $('.people').on('click', peopleHandler);
+
+            $('.people').each(function(index){
+              var flag = _(user.buddyList).contains($(this).text());
+              if (flag) {
+                $(this).parent().addClass("buddy");
+              }
+            });
+
           }
         };
 
